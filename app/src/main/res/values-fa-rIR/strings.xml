@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">لیست وظایف</string>
+    <string name="delete_all_title">حذف همه</string>
+    <string name="delete_all_mesage">"آیا مطمئن هستید که می خواهید همه را حذف کنید؟ "</string>
 </resources>

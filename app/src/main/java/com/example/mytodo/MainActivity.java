@@ -1,9 +1,11 @@
 package com.example.mytodo;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -68,8 +70,21 @@ public class MainActivity extends AppCompatActivity implements AddTaskDialog.Add
         clearTskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.clearAllTask();
-                adapter.clearItems();
+                new AlertDialog.Builder(v.getContext())
+                        .setTitle(R.string.delete_all_title)
+                        .setMessage(R.string.delete_all_mesage)
+
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                db.clearAllTask();
+                                adapter.clearItems();
+                            }
+                        })
+
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
             }
         });
 
