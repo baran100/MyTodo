@@ -52,7 +52,8 @@
                 android:hint="جستجو"
                 android:paddingStart="40dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:paddingBottom="8dp"
+                android:id="@+id/et_main_search">
 
             </EditText>
 

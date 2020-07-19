@@ -5,8 +5,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.idescout.sql.SqlScoutServer;
@@ -15,10 +18,12 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AddTaskDialog.AddNewTaskCallback, TaskAdapter.TaskItemEventListener,
         EditTaskDialog.EditTaskCallback {
-    TaskAdapter adapter;
-    RecyclerView recyclerView;
-    TodoDatabase db;
-    List<Task> tasks;
+
+    private TaskAdapter adapter;
+    private RecyclerView recyclerView;
+    private TodoDatabase db;
+    private List<Task> tasks;
+    private EditText searchEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,29 @@ public class MainActivity extends AppCompatActivity implements AddTaskDialog.Add
         SqlScoutServer.create(this, getPackageName());
         adapter = new TaskAdapter(this);
 
+        EditText searchEt = findViewById(R.id.et_main_search);
+        searchEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    List<Task> tasks = db.searchTask(s.toString());
+                    adapter.setTasks(tasks);
+                } else {
+                    List<Task> tasks = db.getTasks();
+                    adapter.setTasks(tasks);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         recyclerView = findViewById(R.id.rv_main_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
@@ -90,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements AddTaskDialog.Add
 
     @Override
     public void onItemCheckedChange(Task task) {
+        db.updateTak(task);
 
     }
 

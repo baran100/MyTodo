@@ -77,10 +77,6 @@ public class TodoDatabase extends SQLiteOpenHelper {
         return result;
     }
 
-    public void searchTask(String query){
-
-    }
-
     public int deleteTask(Task task){
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
         int result = sqLiteDatabase.delete(TABLE_TASKS,"id = ?",new String[]{String.valueOf(task.getId())});
@@ -95,7 +91,23 @@ public class TodoDatabase extends SQLiteOpenHelper {
         }catch (SQLiteException e){
             Log.i(TAG, "clearAllTask: ");
         }
+    }
 
 
+    public List<Task> searchTask(String query){
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM "+TABLE_TASKS+ " WHERE title LIKE '%"+query+"%'",null);
+        List<Task> tasks = new ArrayList<>();
+        if (cursor.moveToFirst()){
+            do {
+                Task task = new Task();
+                task.setId(cursor.getLong(0));
+                task.setTitle(cursor.getString(1));
+                task.setCompleted(cursor.getInt(2)==1);
+                tasks.add(task);
+            }while (cursor.moveToNext());
+        }
+        sqLiteDatabase.close();
+        return tasks;
     }
 }

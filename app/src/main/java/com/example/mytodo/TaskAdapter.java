@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-    private List<Task> tasks = new ArrayList<>();
+    private List<Task> taskList = new ArrayList<>();
     private TaskItemEventListener eventListener;
 
     public TaskAdapter(TaskItemEventListener eventListener) {
@@ -29,32 +29,32 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        holder.bindTask(tasks.get(position));
+        holder.bindTask(taskList.get(position));
     }
 
     public void addItem(Task task) {
-        tasks.add(0, task);
+        taskList.add(0, task);
         notifyItemInserted(0);
     }
 
     public void updateItem(Task task) {
-        for (int i = 0; i <tasks.size() ; i++) {
+        for (int i = 0; i < taskList.size() ; i++) {
             if (task.getId()== task.getId()){
-                tasks.set(i,task);
+                taskList.set(i,task);
                 notifyItemChanged(i);
             }
         }
     }
 
     public void addItems(List<Task> tasks) {
-        this.tasks.addAll(tasks);
+        this.taskList.addAll(tasks);
         notifyDataSetChanged();
     }
 
     public void deleteItem(Task task) {
-        for (int i = 0; i < tasks.size(); i++) {
-            if (tasks.get(i).getId() == task.getId()) {
-                tasks.remove(i);
+        for (int i = 0; i < taskList.size(); i++) {
+            if (taskList.get(i).getId() == task.getId()) {
+                taskList.remove(i);
                 notifyItemRemoved(i);
                 break;
             }
@@ -62,17 +62,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     public void clearItems() {
-        this.tasks.clear();
+        this.taskList.clear();
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return taskList.size();
     }
 
     public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+        this.taskList = tasks;
         notifyDataSetChanged();
     }
 
@@ -112,6 +112,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                     eventListener.onItemCheckedChange(task);
                 }
             });
+
         }
     }
 
