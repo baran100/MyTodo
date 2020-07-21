@@ -18,7 +18,7 @@ import com.idescout.sql.SqlScoutServer;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AddTaskDialog.AddNewTaskCallback, TaskAdapter.TaskItemEventListener,
+public class TaskListActivity extends AppCompatActivity implements AddTaskDialog.AddNewTaskCallback, TaskAdapter.TaskItemEventListener,
         EditTaskDialog.EditTaskCallback {
 
     private TaskAdapter adapter;
@@ -73,18 +73,15 @@ public class MainActivity extends AppCompatActivity implements AddTaskDialog.Add
                 new AlertDialog.Builder(v.getContext())
                         .setTitle(R.string.delete_all_title)
                         .setMessage(R.string.delete_all_mesage)
-
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 db.clearAllTask();
                                 adapter.clearItems();
                             }
                         })
-
                         .setNegativeButton(android.R.string.no, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
-
             }
         });
 

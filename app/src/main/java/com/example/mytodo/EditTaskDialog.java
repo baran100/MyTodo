@@ -25,6 +25,7 @@ public class EditTaskDialog extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         callback= (EditTaskCallback) context;
+
         task = getArguments().getParcelable("TASK");
         if (task == null){
             dismiss();

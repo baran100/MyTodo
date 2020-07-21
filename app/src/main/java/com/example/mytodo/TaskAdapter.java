@@ -38,9 +38,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     public void updateItem(Task task) {
-        for (int i = 0; i < taskList.size() ; i++) {
-            if (task.getId()== task.getId()){
-                taskList.set(i,task);
+        for (int i = 0; i < taskList.size(); i++) {
+            if (task.getId() == taskList.get(i).getId()) {
+                taskList.set(i, task);
                 notifyItemChanged(i);
             }
         }
@@ -90,6 +90,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             checkBox.setOnCheckedChangeListener(null);
             checkBox.setChecked(task.isCompleted());
             checkBox.setText(task.getTitle());
+
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
