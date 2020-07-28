@@ -23,7 +23,7 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
 
     private TaskAdapter adapter;
     private RecyclerView recyclerView;
-    private TodoDatabase db;
+    private TaskDao taskDao;
     private List<Task> tasks;
     private EditText searchEt;
 
@@ -33,6 +33,8 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
         setContentView(R.layout.activity_main);
         SqlScoutServer.create(this, getPackageName());
         adapter = new TaskAdapter(this);
+
+        taskDao = AppDatabase.getAppDatabase(this).getTaskDao();
 
         EditText searchEt = findViewById(R.id.et_main_search);
         searchEt.addTextChangedListener(new TextWatcher() {
@@ -44,10 +46,10 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
-                    List<Task> tasks = db.searchTask(s.toString());
+                    List<Task> tasks = taskDao.search(s.toString());
                     adapter.setTasks(tasks);
                 } else {
-                    List<Task> tasks = db.getTasks();
+                    List<Task> tasks = taskDao.getAll();
                     adapter.setTasks(tasks);
                 }
             }
@@ -62,8 +64,7 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
         recyclerView.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
         recyclerView.setAdapter(adapter);
 
-        db = new TodoDatabase(this);
-        tasks = db.getTasks();
+        tasks = taskDao.getAll();
         adapter.addItems(tasks);
 
         View clearTskBtn = findViewById(R.id.iv_main_clearTask);
@@ -75,7 +76,7 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
                         .setMessage(R.string.delete_all_mesage)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                db.clearAllTask();
+                                taskDao.deleteAll();
                                 adapter.clearItems();
                             }
                         })
@@ -99,7 +100,7 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
 
     @Override
     public void onNewTask(Task task) {
-        long taskId = db.addTask(task);
+        long taskId = taskDao.addTask(task);
         if (taskId != -1) {
             task.setId(taskId);
             adapter.addItem(task);
@@ -110,7 +111,7 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
 
     @Override
     public void onDeleteButtonClick(Task task) {
-        int result = db.deleteTask(task);
+        int result = taskDao.deleteTask(task);
         if (result>0){
             adapter.deleteItem(task);
             Toast.makeText(this, "ایتم حذف شد", Toast.LENGTH_SHORT).show();
@@ -130,13 +131,13 @@ public class TaskListActivity extends AppCompatActivity implements AddTaskDialog
 
     @Override
     public void onItemCheckedChange(Task task) {
-        db.updateTak(task);
+        taskDao.updateTask(task);
 
     }
 
     @Override
     public void onEditTask(Task task) {
-      int result =  db.updateTak(task);
+      int result =  taskDao.updateTask(task);
       if (result>0){
         adapter.updateItem(task);
 

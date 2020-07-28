@@ -17,7 +17,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private TaskItemEventListener eventListener;
 
     public TaskAdapter(TaskItemEventListener eventListener) {
-
         this.eventListener = eventListener;
     }
 
